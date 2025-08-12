@@ -32,15 +32,20 @@
     .phrase {
       position: absolute;
       font-size: clamp(14px, 4vw, 20px);
-      font-weight: 700;
+      font-weight: 500;
+      background: rgba(255, 192, 203, 0.2);
+      border: 1px solid rgba(255, 192, 203, 0.6);
+      border-radius: 20px;
+      padding: 8px 12px;
       color: var(--accent);
-      text-shadow: 0 0 10px rgba(255, 192, 203, 0.9);
+      text-shadow: 0 0 6px rgba(255, 192, 203, 0.8);
       animation: fall linear forwards;
       pointer-events: none;
       max-width: 90vw;
       white-space: normal;
       word-break: break-word;
       text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
     @keyframes fall {
       0% { transform: translateY(-50px); opacity: 0 }
@@ -56,50 +61,50 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      try {
-        const phrases = [
-          "Cảm ơn vì đã đợi","Ăn nhiều lên cho mau lớn nhé","Thơm gió môi em một cái","Tập đi ngủ sớm đi","Ngủ muộn hại sức khỏe lắm","Mình ộp mệt là được rồi","ộp luôn ở đây","Phạm Thu Hằng rất ngoan","Bảo bối à, tôi tự hào về em","ộp sẽ luôn ở đây","ộp iu đâyyyy","Mèo iu đâu ồi","Chị Phạm Thu Hằng mãi đỉnh","Không ai tự hào về chị, thì nay có em rồi","Đừng bỏ cuộc","new york city là đồ cờ hó","Em sẽ bảo vệ chị","Chị bảo kê đàn em này nhé","Tiểu bảo bốiiii","Mèo ơiiiii","Mèo ơi ộp đây","Có gì kể ộp nghe điiii","Chị thích là được","Vì chị xứng đáng","Mèoooo","Em ở đây nè","Ôm cái nè","Xoa xoa cái bụng cho đỡ đau nè","Ngủ sớm đi bảo bối","Tôi nhắc em","Mong mọi điều tốt đẹp sẽ tới với chị"
-        ];
+      const phrases = [
+        "Cảm ơn vì đã đợi","Ăn nhiều lên cho mau lớn nhé","Thơm gió môi em một cái","Tập đi ngủ sớm đi","Ngủ muộn hại sức khỏe lắm","Mình ộp mệt là được rồi","ộp luôn ở đây","Phạm Thu Hằng rất ngoan","Bảo bối à, tôi tự hào về em","ộp sẽ luôn ở đây","ộp iu đâyyyy","Mèo iu đâu ồi","Chị Phạm Thu Hằng mãi đỉnh","Không ai tự hào về chị, thì nay có em rồi","Đừng bỏ cuộc","new york city là đồ cờ hó","Em sẽ bảo vệ chị","Chị bảo kê đàn em này nhé","Tiểu bảo bốiiii","Mèo ơiiiii","Mèo ơi ộp đây","Có gì kể ộp nghe điiii","Chị thích là được","Vì chị xứng đáng","Mèoooo","Em ở đây nè","Ôm cái nè","Xoa xoa cái bụng cho đỡ đau nè","Ngủ sớm đi bảo bối","Tôi nhắc em","Mong mọi điều tốt đẹp sẽ tới với chị"
+      ];
 
-        const container = document.getElementById('container');
-        if (!container) throw new Error('Container element not found');
+      const container = document.getElementById('container');
 
-        function createPhrase() {
-          const phrase = document.createElement('div');
-          phrase.className = 'phrase';
-          phrase.textContent = phrases[Math.floor(Math.random() * phrases.length)];
-          const leftPos = Math.random() * 80; // tránh sát lề
-          phrase.style.left = leftPos + 'vw';
-          phrase.style.top = '-5vh';
-          phrase.style.animationDuration = (6 + Math.random() * 4) + 's';
-          container.appendChild(phrase);
+      function createPhrase() {
+        const phrase = document.createElement('div');
+        phrase.className = 'phrase';
+        const text = phrases[Math.floor(Math.random() * phrases.length)];
+        phrase.textContent = text;
 
-          setTimeout(() => {
-            if (phrase && phrase.parentNode) phrase.parentNode.removeChild(phrase);
-          }, (parseFloat(phrase.style.animationDuration) * 1000) + 500);
+        if (text.length > 20) {
+          phrase.style.left = (40 + Math.random() * 20) + 'vw';
+        } else {
+          phrase.style.left = (20 + Math.random() * 60) + 'vw';
         }
 
-        function createStars(count) {
-          for (let i = 0; i < count; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = (Math.random() * 2 + 0.8).toFixed(2) + 'px';
-            star.style.width = size;
-            star.style.height = size;
-            star.style.left = (Math.random() * 100) + 'vw';
-            star.style.top = (Math.random() * 100) + 'vh';
-            star.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            document.body.appendChild(star);
-          }
-        }
+        phrase.style.top = '-5vh';
+        phrase.style.animationDuration = (6 + Math.random() * 4) + 's';
+        container.appendChild(phrase);
 
-        createStars(90);
-        for (let i = 0; i < 6; i++) setTimeout(createPhrase, i * 300);
-        setInterval(createPhrase, 1000);
-
-      } catch (err) {
-        console.error('Runtime error in OPIUOI page:', err);
+        setTimeout(() => {
+          if (phrase && phrase.parentNode) phrase.parentNode.removeChild(phrase);
+        }, (parseFloat(phrase.style.animationDuration) * 1000) + 500);
       }
+
+      function createStars(count) {
+        for (let i = 0; i < count; i++) {
+          const star = document.createElement('div');
+          star.className = 'star';
+          const size = (Math.random() * 2 + 0.8).toFixed(2) + 'px';
+          star.style.width = size;
+          star.style.height = size;
+          star.style.left = (Math.random() * 100) + 'vw';
+          star.style.top = (Math.random() * 100) + 'vh';
+          star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+          document.body.appendChild(star);
+        }
+      }
+
+      createStars(90);
+      for (let i = 0; i < 6; i++) setTimeout(createPhrase, i * 300);
+      setInterval(createPhrase, 1000);
     });
   </script>
 </body>
