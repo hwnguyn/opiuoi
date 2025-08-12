@@ -17,7 +17,6 @@
       -moz-osx-font-smoothing:grayscale;
     }
 
-    /* little stars */
     .star{
       position:absolute;
       background: white;
@@ -46,25 +45,15 @@
       100%{transform:translateY(110vh);opacity:0}
     }
 
-    /* status box for simple test results */
-    #statusBox{
-      position:fixed;left:12px;bottom:12px;background:rgba(0,0,0,0.5);color:#fff;padding:8px 12px;border-radius:10px;font-size:13px;z-index:9999;backdrop-filter:blur(6px)
-    }
-    #statusBox.pass{border:2px solid #3bd671}
-    #statusBox.fail{border:2px solid #ff6b6b}
-
-    /* make page responsive and prevent horizontal scroll on small screens */
     @media (max-width:420px){.phrase{font-size:14px}}
   </style>
 </head>
 <body>
-  <div class="container" id="container" aria-hidden="false"></div>
-  <div id="statusBox" aria-live="polite" style="display:none"></div>
+  <div class="container" id="container"></div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       try {
-        // --- PHRASES: keep user-provided content (closed array) ---
         const phrases = [
           "Cảm ơn vì đã đợi",
           "Ăn nhiều lên cho mau lớn nhé",
@@ -99,28 +88,6 @@
           "Mong mọi điều tốt đẹp sẽ tới với chị"
         ];
 
-        // --- basic sanity tests (simple "test cases") ---
-        const testResults = [];
-        testResults.push({name: 'phrases is array', pass: Array.isArray(phrases)});
-        testResults.push({name: 'phrases non-empty', pass: phrases.length > 0});
-        testResults.push({name: 'contains sample text', pass: phrases.includes('Cảm ơn vì đã đợi')});
-
-        const statusBox = document.getElementById('statusBox');
-        function showStatus(){
-          const failed = testResults.filter(t => !t.pass);
-          statusBox.style.display = 'block';
-          if(failed.length === 0){
-            statusBox.className = 'pass';
-            statusBox.textContent = '✔️ Tất cả kiểm tra OK — trang sẵn sàng';
-          } else {
-            statusBox.className = 'fail';
-            statusBox.innerHTML = '❌ Có lỗi: ' + failed.map(f => f.name).join(', ');
-          }
-          // hide after 6s
-          setTimeout(()=>{ statusBox.style.display = 'none'; }, 6000);
-        }
-
-        // --- main animation logic ---
         const container = document.getElementById('container');
         if(!container) throw new Error('Container element not found');
 
@@ -134,8 +101,8 @@
           let x, y;
           let attempts = 0;
           do{
-            x = Math.random() * 90; // vw
-            y = -12; // start above viewport (vh)
+            x = Math.random() * 90;
+            y = -12;
             attempts++;
           } while(isOverlapping(x,y) && attempts < 12);
 
@@ -149,7 +116,6 @@
           phrase.style.animationDuration = (4 + Math.random() * 6) + 's';
           container.appendChild(phrase);
 
-          // cleanup after animation ends
           const lifetime = Math.max(6000, (parseFloat(phrase.style.animationDuration)||6) * 1000 + 500);
           setTimeout(()=>{
             if(phrase && phrase.parentNode) phrase.parentNode.removeChild(phrase);
@@ -171,24 +137,14 @@
           }
         }
 
-        // start
         createStars(90);
-        // initial burst so page doesn't look empty on mobile
         for(let i=0;i<6;i++) setTimeout(createPhrase, i*300);
         const intervalId = setInterval(createPhrase, 800);
 
-        // show tests after small delay
-        setTimeout(showStatus, 400);
-
-        // Expose for debug (in case user wants to run in console)
         window.OPIUOI = { phrases, createPhrase, createStars, stop: ()=>clearInterval(intervalId) };
 
       } catch(err){
         console.error('Runtime error in OPIUOI page:', err);
-        const statusBox = document.getElementById('statusBox');
-        statusBox.style.display = 'block';
-        statusBox.className = 'fail';
-        statusBox.textContent = '❌ Lỗi: ' + (err && err.message ? err.message : String(err));
       }
     });
   </script>
